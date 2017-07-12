@@ -190,7 +190,7 @@ class FenParser0x88
     {
         $this->setFen($fen);
         if (!isset($move['from'])) {
-            $fromAndTo = $this->getFromAndToByNotation($move[CHESS_JSON::MOVE_NOTATION]);
+            $fromAndTo = $this->getFromAndToByNotation($move[ChessJson::MOVE_NOTATION]);
             $move['from'] = $fromAndTo['from'];
             $move['to'] = $fromAndTo['to'];
 

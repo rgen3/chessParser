@@ -24,7 +24,7 @@ class MoveBuilder {
             return;
         }
         $move = preg_replace("/^([a-h])([18])([QRNB])$/", "$1$2=$3", $move );
-        $this->moveReferences[$this->pointer][] = array(CHESS_JSON::MOVE_NOTATION => $move);
+        $this->moveReferences[$this->pointer][] = array(ChessJson::MOVE_NOTATION => $move);
         $this->currentIndex ++;
     }
 
@@ -52,33 +52,33 @@ class MoveBuilder {
         if(strstr($comment,'[%clk' )){
             $clk = preg_replace('/\[%clk[^0-9]*?([0-9\:]+?)[\]]/si', '$1', $comment);
             $comment = str_replace('[%clk ' . $clk . ']', '', $comment);
-            $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_CLOCK] = $clk;
+            $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_CLOCK] = $clk;
         }
 
         $actions = $this->getActions($comment);
         if(!empty($actions)){
-        	if(empty($this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_ACTIONS])){
-		        $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_ACTIONS] = array();
+        	if(empty($this->moveReferences[$this->pointer][$index][ChessJson::MOVE_ACTIONS])){
+		        $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_ACTIONS] = array();
 	        }
 	        foreach($actions as $action){
-		        $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_ACTIONS][] = $action;
+		        $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_ACTIONS][] = $action;
 	        }
         }
 
-        $comment = preg_replace('/\[%'.CHESS_JSON::PGN_KEY_ACTION_ARROW . '[^\]]+?\]/si', '', $comment );
-        $comment = preg_replace('/\[%'.CHESS_JSON::PGN_KEY_ACTION_HIGHLIGHT . '[^\]]+?\]/si', '', $comment );
+        $comment = preg_replace('/\[%'.ChessJson::PGN_KEY_ACTION_ARROW . '[^\]]+?\]/si', '', $comment );
+        $comment = preg_replace('/\[%'.ChessJson::PGN_KEY_ACTION_HIGHLIGHT . '[^\]]+?\]/si', '', $comment );
 	    $comment = trim($comment);
 
         if(empty($comment))return;
 
 
-        $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_COMMENT] = $comment;
+        $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_COMMENT] = $comment;
     }
 
     private function getActions($comment){
     	$ret = array();
-	    if(strstr($comment,'[%' . CHESS_JSON::PGN_KEY_ACTION_ARROW )){
-		    $arrow = preg_replace('/.*?\[%'. CHESS_JSON::PGN_KEY_ACTION_ARROW . ' ([^\]]+?)\].*/si', '$1', $comment);
+	    if(strstr($comment,'[%' . ChessJson::PGN_KEY_ACTION_ARROW )){
+		    $arrow = preg_replace('/.*?\[%'. ChessJson::PGN_KEY_ACTION_ARROW . ' ([^\]]+?)\].*/si', '$1', $comment);
 		    $arrows = explode(",", $arrow);
 
 		    foreach($arrows as $arrow){
@@ -95,8 +95,8 @@ class MoveBuilder {
 			    }
 		    }
 	    }
-	    if(strstr($comment,'[%' . CHESS_JSON::PGN_KEY_ACTION_HIGHLIGHT )){
-		    $arrow = preg_replace('/.*?\[%'. CHESS_JSON::PGN_KEY_ACTION_HIGHLIGHT . ' ([^\]]+?)\].*/si', '$1', $comment);
+	    if(strstr($comment,'[%' . ChessJson::PGN_KEY_ACTION_HIGHLIGHT )){
+		    $arrow = preg_replace('/.*?\[%'. ChessJson::PGN_KEY_ACTION_HIGHLIGHT . ' ([^\]]+?)\].*/si', '$1', $comment);
 		    $arrows = explode(",", $arrow);
 
 		    foreach($arrows as $arrow){
@@ -128,12 +128,12 @@ class MoveBuilder {
 
     public function startVariation(){
         $index = count($this->moveReferences[$this->pointer])-1;
-        if(!isset($this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_VARIATIONS])){
-            $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_VARIATIONS] = array();
+        if(!isset($this->moveReferences[$this->pointer][$index][ChessJson::MOVE_VARIATIONS])){
+            $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_VARIATIONS] = array();
         }
-        $countVariations = count($this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_VARIATIONS]);
-        $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_VARIATIONS][$countVariations] = array();
-        $this->moveReferences[] =& $this->moveReferences[$this->pointer][$index][CHESS_JSON::MOVE_VARIATIONS][$countVariations];
+        $countVariations = count($this->moveReferences[$this->pointer][$index][ChessJson::MOVE_VARIATIONS]);
+        $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_VARIATIONS][$countVariations] = array();
+        $this->moveReferences[] =& $this->moveReferences[$this->pointer][$index][ChessJson::MOVE_VARIATIONS][$countVariations];
         $this->pointer++;
     }
 

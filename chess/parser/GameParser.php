@@ -20,14 +20,14 @@ class GameParser
         $this->fen = $this->getStartFen();
 
         $this->fenParser0x88->newGame($this->fen);
-        $this->parseMoves($this->game[CHESS_JSON::MOVE_MOVES]);
+        $this->parseMoves($this->game[ChessJson::MOVE_MOVES]);
         $this->addParsedProperty();
         return $this->game;
     }
 
     private function addParsedProperty()
     {
-        $this->game[CHESS_JSON::GAME_METADATA][CHESS_JSON::MOVE_PARSED] = 1;
+        $this->game[ChessJson::GAME_METADATA][ChessJson::MOVE_PARSED] = 1;
     }
 
     private function parseMoves(&$moves)
@@ -39,14 +39,14 @@ class GameParser
 
     private function parseAMove(&$move)
     {
-        if (!isset($move[CHESS_JSON::MOVE_NOTATION]) || (isset($move[CHESS_JSON::FEN]) && isset($move[CHESS_JSON::MOVE_FROM]) && isset($move[CHESS_JSON::MOVE_TO]))) {
+        if (!isset($move[ChessJson::MOVE_NOTATION]) || (isset($move[ChessJson::FEN]) && isset($move[ChessJson::MOVE_FROM]) && isset($move[ChessJson::MOVE_TO]))) {
             return;
         }
 
-        if (strlen($move[CHESS_JSON::MOVE_NOTATION]) < 2) return;
-        if (isset($move[CHESS_JSON::MOVE_VARIATIONS])) {
+        if (strlen($move[ChessJson::MOVE_NOTATION]) < 2) return;
+        if (isset($move[ChessJson::MOVE_VARIATIONS])) {
             $fen = $this->fenParser0x88->getFen();
-            $this->parseVariations($move[CHESS_JSON::MOVE_VARIATIONS]);
+            $this->parseVariations($move[ChessJson::MOVE_VARIATIONS]);
             $this->fenParser0x88->setFen($fen);
         }
         $move = $this->fenParser0x88->getParsed($move);
@@ -64,6 +64,6 @@ class GameParser
 
     private function getStartFen()
     {
-        return $this->game[CHESS_JSON::FEN];
+        return $this->game[ChessJson::FEN];
     }
 }

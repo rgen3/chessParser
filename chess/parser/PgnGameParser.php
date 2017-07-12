@@ -29,13 +29,13 @@ class PgnGameParser{
 
     public function getParsedData(){
         $this->gameData = $this->getMetadata();
-        $this->gameData[CHESS_JSON::MOVE_MOVES] = $this->getMoves();
+        $this->gameData[ChessJson::MOVE_MOVES] = $this->getMoves();
         return $this->gameData;
     }
 
     private function getMetadata(){
         $ret = array(
-            CHESS_JSON::GAME_METADATA=>array()
+            ChessJson::GAME_METADATA=>array()
         );
         // TODO set lastmoves property by reading last 3-4 moves in moves array
         $lines = explode("\n", $this->pgnGame);
@@ -46,12 +46,12 @@ class PgnGameParser{
                 if(in_array($metadata['key'], $this->specialMetadata)){
                     $ret[$metadata['key']] = $metadata['value'];
                 }else{
-                    $ret[CHESS_JSON::GAME_METADATA][$metadata['key']] = $metadata['value'];
+                    $ret[ChessJson::GAME_METADATA][$metadata['key']] = $metadata['value'];
                 }
             }
         }
-        if(!isset($ret[CHESS_JSON::FEN])) {
-            $ret[CHESS_JSON::FEN] = $this->defaultFen;
+        if(!isset($ret[ChessJson::FEN])) {
+            $ret[ChessJson::FEN] = $this->defaultFen;
         }
 
         return $ret;
@@ -109,7 +109,7 @@ class PgnGameParser{
     }
 
     private function addGameComment($comment){
-        $this->gameData[CHESS_JSON::GAME_METADATA][CHESS_JSON::MOVE_COMMENT] = $comment;
+        $this->gameData[ChessJson::GAME_METADATA][ChessJson::MOVE_COMMENT] = $comment;
     }
 
     private function getMovesAndComments(){
